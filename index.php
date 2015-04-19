@@ -6,6 +6,16 @@
  * and open the template in the editor.
  */
 
+/* на будущее, блок подключение файлов в директории
+$includeDir = "include/functions";
+$dh = opendir($includeDir);
+while ($filename = readdir($dh)) {
+  $filename = $includeDir . "/" . $filename;
+  include_once($filename);
+}
+*/
+
+
 if (isset($argv[1])) {
 	$workdir = $argv[1];
     echo 'Обрабатываем директорию ' . $workdir ."\n";
@@ -15,41 +25,8 @@ if (isset($argv[1])) {
 
 }
 
-  
-function getFileList($dir, $recurse=false)
-  {
-    // массив, хранящий возвращаемое значение
-    $retval = array();
+include 'include/functions.php';
 
-    // добавить конечный слеш, если его нет
-    if(substr($dir, -1) != "/") $dir .= "/";
+print_r (getFileList ($workdir, TRUE));
 
-    // указание директории и считывание списка файлов
-    $d = @dir($dir) or die("getFileList: Не удалось открыть каталог $dir для чтения");
-    while(false !== ($entry = $d->read())) {
-
-      // пропустить скрытые файлы
-      if($entry[0] == ".") continue;
-      if(is_dir("$dir$entry")) {
-        $retval[] = array(
-          "name" => "$dir$entry/",
-          "size" => 0,
-          "lastmod" => filemtime("$dir$entry")
-        );
-        if($recurse && is_readable("$dir$entry/")) {
-          $retval = array_merge($retval, getFileList("$dir$entry/", true));
-        }
-      } elseif(is_readable("$dir$entry")) {
-        $retval[] = array(
-          "name" => "$dir$entry",
-          "size" => filesize("$dir$entry"),
-          "lastmod" => filemtime("$dir$entry")
-        );
-      }
-    }
-    $d->close();
-
-    return $retval;
-  }
-  print_r (getFileList ($workdir, TRUE));
   

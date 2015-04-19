@@ -58,6 +58,14 @@ for ($i = 0; $i < count($sourceFiles); $i++) {
       $count = $count + 1;
     }
 
+
+
+
+    //$targetFile = fopen($file,'a') or die("can't open file");
+    //fwrite($targetFile, "Это строка".";"); //выводим в файл
+
+
+
     fclose($textFile); //закрываем
   }
 }

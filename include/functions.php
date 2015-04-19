@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-function getFileList($dir, $recurse = false) {
+function getFileList($dir, $recurse = false, $depth = false) {
   // массив, хранящий возвращаемое значение
   $retval = array();
 
@@ -15,7 +15,7 @@ function getFileList($dir, $recurse = false) {
     $dir .= "/";
 
   // указание директории и считывание списка файлов
-  $d = @dir($dir) or die("getFileList: Не удалось открыть каталог " . $dir . " для чтения\n");
+  $d = @dir($dir) or die("getFileList: Не удалось открыть каталог $dir для чтения");
   while (false !== ($entry = $d->read())) {
 
     // пропустить скрытые файлы
@@ -28,7 +28,12 @@ function getFileList($dir, $recurse = false) {
         "lastmod" => filemtime("$dir$entry")
       );
       if ($recurse && is_readable("$dir$entry/")) {
-        $retval = array_merge($retval, getFileList("$dir$entry/", true));
+        if ($depth === false) {
+          $retval = array_merge($retval, getFileList("$dir$entry/", true));
+        }
+        elseif ($depth > 0) {
+          $retval = array_merge($retval, getFileList("$dir$entry/", true, $depth - 1));
+        }
       }
     }
     elseif (is_readable("$dir$entry")) {

@@ -62,16 +62,18 @@ for ($i = 0; $i < count($sourceFiles); $i++) {
   if ($sourceFiles[$i]['size'] > 0) {
     echo "Обрабатывается " . $sourceFiles[$i]['name'] . "\n";
     $contentInFile = file_get_contents($sourceFiles[$i]['name']); // дёргаем контент целиком
-    //echo $contentInFile."\n";
+    
+    
+
+    // Здесь функции обработки контента
+    
+    
+    
     echo $lenghtInPath . ' Файл из массива ' . $sourceFiles[$i]['name'] . "\n";
     $outFilePath = $outDir . "/" . mb_substr($sourceFiles[$i]['name'], $lenghtInPath + 1);
     echo "Путь целевого файла " . $outFilePath . "\n";
-
-    //$targetFile = fopen($outFilePath,'a') or die("can't open file");
-    //fwrite($targetFile, ); //выводим в файл
-
-
-
+    $targetFile = fopen($outFilePath,'a') or die("can't open file");
+    fwrite($targetFile, $contentInFile); //выводим в файл
     fclose($textFile); //закрываем
     echo "-------------------------------------------------\n";
   }
@@ -86,6 +88,7 @@ for ($i = 0; $i < count($sourceFiles); $i++) {
       // если же директория
       $outDirPath = $outDir . "/" . mb_substr($sourceFiles[$i]['name'], $lenghtInPath + 1);
       echo "Путь целевой директории " . $outDirPath . "\n";
+      mkdir($outDirPath, 0755, true); // создаём директорию
     }
   }
 }

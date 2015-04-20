@@ -63,18 +63,43 @@ for ($i = 0; $i < count($sourceFiles); $i++) {
     echo "Обрабатывается " . $sourceFiles[$i]['name'] . "\n";
     $contentInFile = file_get_contents($sourceFiles[$i]['name']); // дёргаем контент целиком
     
-    
+
 
     // Здесь функции обработки контента
-    
-    
-    
+    $contentInFile = truncateText($contentInFile, '', '</html>') . "</html>\n";
+    $contentInFile = removeExcess($contentInFile, '<!-- BEGIN WAYBACK TOOLBAR INSERT -->', '<!-- END WAYBACK TOOLBAR INSERT -->');
+    $contentInFile = removeExcess($contentInFile, '<script type="text/javascript">archive_analytics', '</script>');
+    $contentInFile = removeExcess($contentInFile, '/web/', '_/');
+$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+
+
+
+
+    echo $contentInFile . "\n";
+    /////////////////////////////
+
+
     echo $lenghtInPath . ' Файл из массива ' . $sourceFiles[$i]['name'] . "\n";
     $outFilePath = $outDir . "/" . mb_substr($sourceFiles[$i]['name'], $lenghtInPath + 1);
     echo "Путь целевого файла " . $outFilePath . "\n";
-    $targetFile = fopen($outFilePath,'a') or die("can't open file");
-    fwrite($targetFile, $contentInFile); //выводим в файл
-    fclose($textFile); //закрываем
+    //$targetFile = fopen($outFilePath,'a') or die("can't open file");
+    //fwrite($targetFile, $contentInFile); //выводим в файл
+    //fclose($targetFile); //закрываем
     echo "-------------------------------------------------\n";
   }
   else {

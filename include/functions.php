@@ -50,8 +50,8 @@ function getFileList($dir, $recurse = false, $depth = false) {
 }
 
 function truncateText($text, $startEntry, $endEntry, $includeStart = FALSE, $includeEnd = FALSE) {
-    $lenghtStartEntry = mb_strlen($startEntry);
-    $lenghtEndEntry = mb_strlen($endEntry);
+  $lenghtStartEntry = mb_strlen($startEntry);
+  $lenghtEndEntry = mb_strlen($endEntry);
 
 //    if ($includeStart == TRUE) {
 //        $positionStart = mb_strpos($text, $startEntry);
@@ -60,24 +60,59 @@ function truncateText($text, $startEntry, $endEntry, $includeStart = FALSE, $inc
 //    }
 
 
-    if ($startEntry == NULL) {
-        $positionStart = 0;  //
-    } else {
-        $positionStart = mb_strpos($text, $startEntry) + $lenghtStartEntry;
+  if ($startEntry == NULL) {
+    $positionStart = 0;  //
+  }
+  else {
+    $positionStart = mb_strpos($text, $startEntry) + $lenghtStartEntry;
+  }
+
+  if ($endEntry == NULL) {
+    $result = trim(mb_substr($text, $positionStart));  //
+  }
+  else {
+    $positionEnd = mb_strpos($text, $endEntry, $positionStart);
+    //если же вхождение не найдено
+    if ($positionEnd == NULL) {
+      $result = trim(mb_substr($text, $positionStart));
     }
-
-    if ($endEntry == NULL) {
-        $result = trim(mb_substr($text, $positionStart));  //
-    } else {
-        $positionEnd = mb_strpos($text, $endEntry, $positionStart);
-        //если же вхождение не найдено
-        if ($positionEnd == NULL) {
-            $result = trim(mb_substr($text, $positionStart));
-        } else {
-            $result = trim(mb_substr($text, $positionStart, $positionEnd - $positionStart));  //
-        }
+    else {
+      $result = trim(mb_substr($text, $positionStart, $positionEnd - $positionStart));  //
     }
+  }
 
 
-    return $result;
+  return $result;
+}
+
+
+
+function removeExcess($text, $startEntry, $endEntry) {
+  $lenghtStartEntry = mb_strlen($startEntry);
+  $lenghtEndEntry = mb_strlen($endEntry);
+  if ($startEntry == NULL) {
+    $positionStart = 0;  //
+  }
+  else {
+    //$positionStart = mb_strpos($text, $startEntry) + $lenghtStartEntry;
+    $positionStart = mb_strpos($text, $startEntry);
+  }
+  $contentHead = mb_substr($text, 0, $positionStart);
+
+  
+  $contentTail = mb_substr($text, $positionStart);
+  
+  $tailLenght = mb_strlen($contentTail);
+  if ($endEntry == NULL) {
+    $positionEnd = $tailLenght;  
+  }
+  else {
+    //$positionStart = mb_strpos($text, $startEntry) + $lenghtStartEntry;
+    $positionEnd = mb_strpos($contentTail, $endEntry);
+  }
+  $contentTail = mb_substr($contentTail, $positionEnd+$lenghtEndEntry);
+  
+  
+  $result = $contentHead.$contentTail;
+  return $result;
 }

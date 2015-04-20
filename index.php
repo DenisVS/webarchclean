@@ -56,27 +56,16 @@ for ($i = 0; $i < count($sourceFiles); $i++) {
   if ($sourceFiles[$i]['size'] > 0) {
     echo "Обрабатывается " . $sourceFiles[$i]['name'] . "\n";
 
-    $textFile = fopen($sourceFiles[$i]['name'], "r");  //открываем файл на чтение
-    if (!$textFile) {  //если файл не открывается
-      echo "\nОшибка открытия файла!\n";
-      exit(); //выходим
-    }
-    //читаем файл
-    $count = 0;
-    while (!feof($textFile)) {  //пока не дошли до конца файла 
-      $aText[$count] = fgets($textFile);
-      echo $aText[$count];
-      echo "\n";
-      $count = $count + 1;
-    }
+    $contentInFile = file_get_contents($sourceFiles[$i]['name']);
 
-    $relativeFilePath = mb_substr($sourceFiles[$i]['name'], $lenghtOutPath); // обрубаем начало пути, вычисляя relative path
-    echo "Относительный путь выхлопа " . $relativeFilePath . "\n";
-    $fullOutFilePath = $outDir . "/" . $relativeFilePath;
-    echo "Полный путь выхлопа " . $fullOutFilePath . "\n";
+    
+    
 
-    //$targetFile = fopen($file,'a') or die("can't open file");
-    //fwrite($targetFile, "Это строка".";"); //выводим в файл
+    $outFilePath = $outDir . "/" . mb_substr($sourceFiles[$i]['name'], $lenghtOutPath);
+    echo "Путь целевого файла " . $outFilePath . "\n";
+
+    $targetFile = fopen($outFilePath,'a') or die("can't open file");
+    //fwrite($targetFile, ); //выводим в файл
 
 
 

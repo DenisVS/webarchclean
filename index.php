@@ -62,34 +62,29 @@ for ($i = 0; $i < count($sourceFiles); $i++) {
   if ($sourceFiles[$i]['size'] > 0) {
     echo "Обрабатывается " . $sourceFiles[$i]['name'] . "\n";
     $contentInFile = file_get_contents($sourceFiles[$i]['name']); // дёргаем контент целиком
-    
-
-
-    // Здесь функции обработки контента
+    /////// Здесь функции обработки контента
     $contentInFile = truncateText($contentInFile, '', '</html>') . "</html>\n";
     $contentInFile = removeExcess($contentInFile, '<!-- BEGIN WAYBACK TOOLBAR INSERT -->', '<!-- END WAYBACK TOOLBAR INSERT -->');
     $contentInFile = removeExcess($contentInFile, '<script type="text/javascript">archive_analytics', '</script>');
-    $contentInFile = removeExcess($contentInFile, '/web/', '_/');
-$contentInFile = removeExcess($contentInFile, '/web/', '_/');
-$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
-$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
-$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
-$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
-$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
-$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
-$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
-$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
-$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
-$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
-$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
-$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
-$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
-$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
-$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = removeExcess($contentInFile, '/web/', '_/');
+    $contentInFile = removeExcess($contentInFile, '<!--LiveInternet counter-->', '<!--/LiveInternet-->');
+    $contentInFile = removeExcess($contentInFile, '<!-- Start of SOBI2 Search Form Module -->', '-- End of SOBI2 Search Form Module -->');
+    $contentInFile = removeExcess($contentInFile, '<div id="footerHome">', '</div>');
 
 
+    $contentInFileArr = explode("\n", $contentInFile);  // Запихиваем страницу по строкам в массив
+    $contentInFile = '';
+    foreach ($contentInFileArr as $key => $val) {
+      //$val = removeExcess($val, '/web/', '_/');
+      //$val = preg_replace('%(href|src|action)(.*)=(.*)(\'|")/web/(\d+)(\D*_)*/http://%', '$1=$2http://', $val);
 
+      $val = preg_replace('%\(/web/(\d+)(\D*_)*/http://%', '(http://', $val);
+      $val = preg_replace('%(href|src|action|codebase|url|URL)(.*)=(.*)(\'|")\\\\*/web\\\\*/(\d+)(\D*_)*\\\\*/http(s*):(\\\\*)/(\\\\*)/%', '$1=$4http$7:$8/$9/', $val);
+      $val = preg_replace('%href="http://web\.archive\.org/web/(\d*)/http://%', 'http://', $val);
 
+      //echo $val . "\n";
+      $contentInFile .= $val . "\n";
+    }
+    //
     echo $contentInFile . "\n";
     /////////////////////////////
 
@@ -97,9 +92,11 @@ $contentInFile = removeExcess($contentInFile, '/web/', '_/');$contentInFile = re
     echo $lenghtInPath . ' Файл из массива ' . $sourceFiles[$i]['name'] . "\n";
     $outFilePath = $outDir . "/" . mb_substr($sourceFiles[$i]['name'], $lenghtInPath + 1);
     echo "Путь целевого файла " . $outFilePath . "\n";
-    //$targetFile = fopen($outFilePath,'a') or die("can't open file");
-    //fwrite($targetFile, $contentInFile); //выводим в файл
-    //fclose($targetFile); //закрываем
+
+    $targetFile = fopen($outFilePath, 'a') or die("can't open file");
+    fwrite($targetFile, $contentInFile); //выводим в файл
+    fclose($targetFile); //закрываем
+
     echo "-------------------------------------------------\n";
   }
   else {

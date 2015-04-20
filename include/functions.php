@@ -48,3 +48,36 @@ function getFileList($dir, $recurse = false, $depth = false) {
 
   return $retval;
 }
+
+function truncateText($text, $startEntry, $endEntry, $includeStart = FALSE, $includeEnd = FALSE) {
+    $lenghtStartEntry = mb_strlen($startEntry);
+    $lenghtEndEntry = mb_strlen($endEntry);
+
+//    if ($includeStart == TRUE) {
+//        $positionStart = mb_strpos($text, $startEntry);
+//    } else {
+//        $positionStart = mb_strpos($text, $startEntry) + $lenghtStartEntry;
+//    }
+
+
+    if ($startEntry == NULL) {
+        $positionStart = 0;  //
+    } else {
+        $positionStart = mb_strpos($text, $startEntry) + $lenghtStartEntry;
+    }
+
+    if ($endEntry == NULL) {
+        $result = trim(mb_substr($text, $positionStart));  //
+    } else {
+        $positionEnd = mb_strpos($text, $endEntry, $positionStart);
+        //если же вхождение не найдено
+        if ($positionEnd == NULL) {
+            $result = trim(mb_substr($text, $positionStart));
+        } else {
+            $result = trim(mb_substr($text, $positionStart, $positionEnd - $positionStart));  //
+        }
+    }
+
+
+    return $result;
+}

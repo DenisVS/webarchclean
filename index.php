@@ -17,6 +17,15 @@
 
 
 if (isset($argv[1])) {
+  $lenghtOfPath = mb_strlen($argv[1]);
+  $pos = mb_strpos($argv[1], "/", $lenghtOfPath); // Есть ли в последней позиции слэш
+  if ($pos === false) {
+    echo "Символ / не найден\n";
+  }
+  else {
+    echo "Символ / найден\n";
+    echo " в позиции $pos";
+  }
   $indir = $argv[1];
   echo 'Директория исходных файлов ' . $indir . "\n";
 }

@@ -15,19 +15,17 @@
   }
  */
 
+include 'include/functions.php';
 
 if (isset($argv[1])) {
-  $lenghtOfPath = mb_strlen($argv[1]);
-  $pos = mb_strpos($argv[1], "/", $lenghtOfPath); // Есть ли в последней позиции слэш
+  $pos = mb_strpos($argv[1], "/", mb_strlen($argv[1]) - 1); // Есть ли в последней позиции слэш
   if ($pos === false) {
-    echo "Символ / не найден\n";
+    $inDir = $argv[1];
   }
   else {
-    echo "Символ / найден\n";
-    echo " в позиции $pos";
+    $inDir = substr($argv[1], 0, mb_strlen($argv[1]) - 1);    // отрубаем последний слэш     
   }
-  $indir = $argv[1];
-  echo 'Директория исходных файлов ' . $indir . "\n";
+  echo 'Директория исходных файлов ' . $inDir . "\n";
 }
 else {
   echo "Введите директорию с исходными файлами\n";
@@ -35,18 +33,21 @@ else {
 }
 
 if (isset($argv[2])) {
-  $outdir = $argv[2];
-  echo 'Директория с обработанными файлами ' . $outdir . "\n";
+  $pos = mb_strpos($argv[2], "/", mb_strlen($argv[2]) - 1); // Есть ли в последней позиции слэш
+  if ($pos === false) {
+    $outDir = $argv[2];
+  }
+  else {
+    $outDir = substr($argv[2], 0, mb_strlen($argv[2]) - 1);    // отрубаем последний слэш     
+  }
+  echo 'Директория с обработанными файлами ' . $outDir . "\n";
 }
 else {
   echo "Введите директорию с обработанными файлами\n";
   exit();
 }
 
-
-include 'include/functions.php';
-
-$sourceFiles = (getFileList($indir, TRUE));
+$sourceFiles = (getFileList($inDir, TRUE)); // получаем листинг
 
 //цикл вывода всего массива непустых файлов
 for ($i = 0; $i < count($sourceFiles); $i++) {

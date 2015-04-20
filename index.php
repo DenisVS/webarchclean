@@ -18,12 +18,13 @@
 include 'include/functions.php';
 
 if (isset($argv[1])) {
-  $pos = mb_strpos($argv[1], "/", mb_strlen($argv[1]) - 1); // Есть ли в последней позиции слэш
+  $lenghtInPath = mb_strlen($argv[1]) - 1;
+  $pos = mb_strpos($argv[1], "/", $lenghtInPath); // Есть ли в последней позиции слэш
   if ($pos === false) {
     $inDir = $argv[1];
   }
   else {
-    $inDir = substr($argv[1], 0, mb_strlen($argv[1]) - 1);    // отрубаем последний слэш     
+    $inDir = substr($argv[1], 0, $lenghtInPath);    // отрубаем последний слэш     
   }
   echo 'Директория исходных файлов ' . $inDir . "\n";
 }
@@ -33,13 +34,15 @@ else {
 }
 
 if (isset($argv[2])) {
-  $pos = mb_strpos($argv[2], "/", mb_strlen($argv[2]) - 1); // Есть ли в последней позиции слэш
+  $lenghtOutPath = mb_strlen($argv[2]) - 1;
+  $pos = mb_strpos($argv[2], "/", $lenghtOutPath); // Есть ли в последней позиции слэш
   if ($pos === false) {
     $outDir = $argv[2];
   }
   else {
-    $outDir = substr($argv[2], 0, mb_strlen($argv[2]) - 1);    // отрубаем последний слэш     
+    $outDir = substr($argv[2], 0, $lenghtOutPath);    // отрубаем последний слэш     
   }
+  mkdir($outDir, 0755, true);
   echo 'Директория с обработанными файлами ' . $outDir . "\n";
 }
 else {
@@ -48,7 +51,6 @@ else {
 }
 
 $sourceFiles = (getFileList($inDir, TRUE)); // получаем листинг
-
 //цикл вывода всего массива непустых файлов
 for ($i = 0; $i < count($sourceFiles); $i++) {
   if ($sourceFiles[$i]['size'] > 0) {
@@ -68,8 +70,10 @@ for ($i = 0; $i < count($sourceFiles); $i++) {
       $count = $count + 1;
     }
 
-
-
+    $relativeFilePath = mb_substr($sourceFiles[$i]['name'], $lenghtOutPath); // обрубаем начало пути, вычисляя relative path
+    echo "Относительный путь выхлопа " . $relativeFilePath . "\n";
+    $fullOutFilePath = $outDir . "/" . $relativeFilePath;
+    echo "Полный путь выхлопа " . $fullOutFilePath . "\n";
 
     //$targetFile = fopen($file,'a') or die("can't open file");
     //fwrite($targetFile, "Это строка".";"); //выводим в файл
@@ -77,6 +81,7 @@ for ($i = 0; $i < count($sourceFiles); $i++) {
 
 
     fclose($textFile); //закрываем
+    echo "-------------------------------------------------\n";
   }
 }
 

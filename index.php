@@ -55,11 +55,10 @@ $sourceFiles = (getFileList($inDir, TRUE)); // получаем листинг
 for ($i = 0; $i < count($sourceFiles); $i++) {
   if ($sourceFiles[$i]['size'] > 0) {
     echo "Обрабатывается " . $sourceFiles[$i]['name'] . "\n";
-
-    $contentInFile = file_get_contents($sourceFiles[$i]['name']);
+    $contentInFile = file_get_contents($sourceFiles[$i]['name']); // дёргаем контент целиком
 
     
-    
+    echo $contentInFile."\n";
 
     $outFilePath = $outDir . "/" . mb_substr($sourceFiles[$i]['name'], $lenghtOutPath);
     echo "Путь целевого файла " . $outFilePath . "\n";
